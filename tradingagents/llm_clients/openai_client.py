@@ -57,7 +57,9 @@ class OpenAIClient(BaseLLMClient):
             # Support custom Ollama URL via base_url or OLLAMA_HOST env var
             ollama_url = self.base_url or os.environ.get("OLLAMA_HOST", "http://localhost:11434")
             # Normalize URL: ensure it ends with /v1 for OpenAI-compatible API
+            # Strip trailing slashes to avoid double-slash or duplicate /v1 issues
             ollama_url = ollama_url.rstrip("/")
+            # Only add /v1 if URL doesn't already end with it
             if not ollama_url.endswith("/v1"):
                 ollama_url = f"{ollama_url}/v1"
             llm_kwargs["base_url"] = ollama_url
